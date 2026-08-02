@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# MongoDB data
+mongo_data/
+
+# Build output
+dist/
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

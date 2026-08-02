@@ -1,0 +1,20 @@
+services:
+  express:
+    build:
+      target: development
+    env_file:
+      - .env.development
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    command: [ "npm", "run", "dev" ]
+
+  mongo:
+    ports:
+      - "27017:27017"
+
+volumes:
+  node_modules:
+
