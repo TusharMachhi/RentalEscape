@@ -7,7 +7,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon sever.js",
+    "dev": "NODE_ENV=development nodemon server.js",
     "start": "NODE_ENV=production node server.js"
   },
   "devDependencies": {
@@ -19,9 +19,13 @@
     "prettier": "^3.9.6"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
     "dotenv-flow": "^4.1.0",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
+    "winston": "^3.19.0",
     "zod": "^4.4.3"
   }
 }

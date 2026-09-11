@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ErorrClassAPi.js";
 
 export const userServices = {
   register: async (data) => {
-    const existingUser = await userRepo.findByEmail(data);
+    const existingUser = await userRepo.findByEmail(data.email);
 
     if (existingUser) {
       throw new ApiError(409, "user already exist");
