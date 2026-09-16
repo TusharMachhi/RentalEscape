@@ -10,6 +10,8 @@ export const userServices = {
     }
 
     const user = await userRepo.create(data);
+    
+
     return user;
   },
 };

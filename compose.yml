@@ -7,7 +7,7 @@ services:
         condition: service_healthy
 
   mongo:
-    image: mongo:latest
+    image: mongo:8.0.4
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped

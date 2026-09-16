@@ -59,53 +59,71 @@ const addressSchema = new mongoose.Schema(
   },
 );
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     userName: {
       type: String,
-      require: true,
+      required: true,
+      trim: true,
+      maxlength: 50,
     },
+
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
+      trim: true,
+      lowercase: true,
     },
+
     password: {
       type: String,
+      required: true,
       select: false,
-      require: true,
     },
-    avatar: {
+
+    profile: {
       type: String,
       default: null,
     },
-    address: [addressSchema],
+
+    address: {
+      type: [addressSchema],
+      default: [],
+    },
+
     role: {
       type: String,
       enum: ["user", "host", "admin"],
       default: "user",
     },
+
     refreshToken: {
       type: String,
+      default: null,
+      select: false,
     },
   },
-
   {
-    timeStamps: true,
+    timestamps: true,
   },
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
+
   this.password = await bcrypt.hash(this.password, 10);
-  return next();
 });
+
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
 userSchema.methods.generateAccessToken = function (payload) {
   return jwt.sign(payload, process.env.ACCESSTOKEN_SECRET, {
-    expiresIn: process.env.ACCESSTOKENT_EXPIRES,
+    expiresIn: process.env.ACCESSTOKEN_EXPIRES,
   });
 };
 

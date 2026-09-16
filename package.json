@@ -20,11 +20,13 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
     "dotenv-flow": "^4.1.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
+    "multer": "^2.3.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   }

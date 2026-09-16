@@ -1,8 +1,8 @@
-import { ApiError } from "../ErorrClassAPi";
+import { ApiError } from "../ErorrClassAPi.js";
 export const apiVersioning = (version) => (req, res, next) => {
-  if (req.path.startWith(`/api/${version}`)) {
+  if (req.path.startsWith(`/api/${version}`)) {
     next();
   } else {
-    return new ApiError(400, "api version is not supported");
+    return next(new ApiError(400, "api version is not supported"));
   }
 };
