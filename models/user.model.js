@@ -103,6 +103,7 @@ const userSchema = new mongoose.Schema(
       default: null,
       select: false,
     },
+    passwordChangedAt: Date,
   },
   {
     timestamps: true,
@@ -123,7 +124,7 @@ userSchema.methods.isCorrectPassword = async function (password) {
 
 userSchema.methods.generateAccessToken = function (payload) {
   return jwt.sign(payload, process.env.ACCESSTOKEN_SECRET, {
-    expiresIn: process.env.ACCESSTOKEN_EXPIRES,
+    expiresIn: process.env.ACCESSTOKENT_EXPIRES,
   });
 };
 
@@ -132,6 +133,15 @@ userSchema.methods.generateRefreshToken = function (payload) {
     expiresIn: process.env.REFRESHTOKEN_EXPIRES,
   });
 };
+
+userSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    delete ret.password;
+    delete ret.refreshToken;
+
+    return ret;
+  },
+});
 
 const User = mongoose.model("User", userSchema);
 

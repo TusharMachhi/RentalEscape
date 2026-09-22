@@ -4,10 +4,12 @@ import { configureCors } from "./config/corsConfig.js";
 import { apiVersioning } from "./utils/middleware/apiVersioning.js";
 import { ApiError } from "./utils/ErorrClassAPi.js";
 import { globalErrorHandler } from "./utils/globalErorrHandler.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(configureCors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(apiVersioning("v1"));
 
 app.use("/api/v1/users", userRoute);

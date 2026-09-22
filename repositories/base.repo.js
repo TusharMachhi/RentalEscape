@@ -5,5 +5,7 @@ export const baseRepo = (Model) => ({
 
   deleteById: (id) => Model.findByIdAndDelete(id),
 
-  findById: (id) => Model.findById(id),
+  findById: (id, select = "") => Model.findById(id, select),
+
+  find: () => Model.find(),
 });

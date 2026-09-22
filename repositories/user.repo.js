@@ -4,5 +4,12 @@ import Model from "../models/user.model.js";
 export const userRepo = {
   ...baseRepo(Model),
 
-  findByEmail: (email) => Model.findOne({ email }),
+  findByEmail: (email, select = "") => Model.findOne({ email }).select(select),
+
+  invalidateRefreshToken: (userId) =>
+    Model.findByIdAndUpdate(
+      userId,
+      { $unset: { refreshToken: 1 } },
+      { returnDocument: "after" },
+    ),
 };

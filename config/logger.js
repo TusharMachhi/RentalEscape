@@ -6,22 +6,50 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const developmentFormat = combine(
   colorize(),
+
   timestamp({
     format: "YYYY-MM-DD HH:mm:ss",
   }),
+
   errors({
     stack: true,
   }),
-  printf(({ timestamp, level, message, stack }) => {
-    return `${timestamp} ${level}: ${stack || message}`;
-  }),
+
+  printf(
+    ({
+      timestamp,
+      level,
+      message,
+      stack,
+      method,
+      url,
+      statusCode,
+      ip,
+      ...meta
+    }) => {
+      const requestInfo = method && url ? ` | ${method} ${url}` : "";
+
+      const statusInfo = statusCode ? ` | Status: ${statusCode}` : "";
+
+      const ipInfo = ip ? ` | IP: ${ip}` : "";
+
+      const metadata =
+        Object.keys(meta).length > 0 ? ` | ${JSON.stringify(meta)}` : "";
+
+      return `${timestamp} ${level}: ${
+        stack || message
+      }${requestInfo}${statusInfo}${ipInfo}${metadata}`;
+    },
+  ),
 );
 
 const productionFormat = combine(
   timestamp(),
+
   errors({
     stack: true,
   }),
+
   json(),
 );
 
