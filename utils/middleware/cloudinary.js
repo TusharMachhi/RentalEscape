@@ -10,9 +10,17 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadToCloudinary = async (localPath) => {
+export const uploadToCloudinary = async ({
+  localPath,
+  folder,
+  resourceType = "auto",
+}) => {
   if (!localPath) {
     throw new ApiError(500, "Local media file path is required");
+  }
+
+  if (!folder) {
+    throw new ApiError(500, "Cloudinary folder is required");
   }
 
   try {
@@ -22,7 +30,8 @@ export const uploadToCloudinary = async (localPath) => {
     });
 
     const result = await cloudinary.uploader.upload(localPath, {
-      resource_type: "auto",
+      resource_type: resourceType,
+      folder,
     });
 
     logger.info("Media uploaded to Cloudinary", {
@@ -40,8 +49,10 @@ export const uploadToCloudinary = async (localPath) => {
       provider: "cloudinary",
       operation: "media_upload",
       message: error.message,
+      error: error,
       stack: error.stack,
     });
+    console.log("ERROR", error);
 
     throw new ApiError(500, "Failed to upload media to Cloudinary");
   } finally {

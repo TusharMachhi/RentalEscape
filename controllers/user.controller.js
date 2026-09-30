@@ -80,11 +80,17 @@ export const getAllUser = async (req, res) => {
     .json(new ResponseApi(200, "all user fetch successfully", users));
 };
 
-
-
 export const uploadProfileImage = async (req, res) => {
-  console.log(req.file);
-  console.log("profile image upload");
+  const user = req?.user;
+  await userServices.uploadUserProfile(
+    {
+      localPath: req.file.path,
+      folder: `EscapeRental/user/${user?.userId}/images`,
+      resourceType: "image",
+    },
+    user.userId,
+  );
+
   return res
     .status(201)
     .json(new ResponseApi(201, "user profile uploaded successfully"));
@@ -97,4 +103,10 @@ export const getUserById = async (req, res) => {
   res
     .status(200)
     .json(new ResponseApi(200, "fetch user data successfully", user));
+};
+
+export const deleteUser = async (req, res) => {
+  const user = await userServices.deletUser(req?.user?.userId);
+  logger.info(user);
+  res.status(200).json(new ResponseApi(200,"user deleted successfully"))
 };

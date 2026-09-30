@@ -3,6 +3,7 @@ import { userRepo } from "../repositories/user.repo.js";
 import { ApiError } from "../utils/ErorrClassAPi.js";
 import { genAccessAndRefreshToken } from "../utils/genRefAndAcessToken.js";
 import { logger } from "../config/logger.js";
+import { uploadToCloudinary } from "../utils/middleware/cloudinary.js";
 
 export const userServices = {
   register: async (data) => {
@@ -53,7 +54,7 @@ export const userServices = {
     if (!refreshToken) {
       throw new ApiError(401, "refresh token expired");
     }
-    console.log(refreshToken);
+
     const decoded = jwt.verify(refreshToken, process.env.REFRESHTOKEN_SECRET);
 
     const user = await userRepo.findById(decoded?.userId, "+refreshToken");
@@ -83,4 +84,28 @@ export const userServices = {
     }
     return user;
   },
+  uploadUserProfile: async (file, userId) => {
+    if (!file) {
+      throw new ApiError(404, "image file path not found");
+    }
+    const { public_id, secure_url, asset_id } = await uploadToCloudinary(file);
+
+    const data = {
+      profile: {
+        publicId: public_id,
+        secureUrl: secure_url,
+        assetId: asset_id,
+      },
+    };
+
+    await userRepo.updateById(userId, data);
+  },
+
+  deletUser: async (userId) => {
+    if (!userId) {
+      throw new ApiError(404, "user id is missing");
+    }
+    return await userRepo.updateById(userId, { active: false });
+  },
 };
+

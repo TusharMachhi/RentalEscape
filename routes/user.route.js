@@ -14,6 +14,7 @@ import {
   getAllUser,
   logoutUser,
   getUserById,
+  deleteUser,
 } from "../controllers/user.controller.js";
 import { uploadfile } from "../utils/middleware/multer.js";
 
@@ -33,9 +34,10 @@ router.route("/refresh-accesstoken").post(asyncHandler(refresAceeshToken));
 
 router.route("/getall-users").get(asyncHandler(getAllUser));
 router.route("/get-user/:id").get(asyncHandler(getUserById));
+router.route("/delete-user").delete(auth, asyncHandler(deleteUser));
 
 router
   .route("/upload-profile")
-  .post(uploadfile.single("profile"), asyncHandler(uploadProfileImage));
+  .patch(auth, uploadfile.single("profile"), asyncHandler(uploadProfileImage));
 
 export default router;

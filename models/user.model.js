@@ -67,6 +67,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
       maxlength: 50,
     },
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      trim: true,
+    },
 
     email: {
       type: String,
@@ -83,13 +90,29 @@ const userSchema = new mongoose.Schema(
     },
 
     profile: {
-      type: String,
-      default: null,
+      publicId: {
+        type: String,
+        default: null,
+      },
+
+      assetId: {
+        type: String,
+        default: null,
+      },
+
+      secureUrl: {
+        type: String,
+        default: null,
+      },
     },
 
     address: {
       type: [addressSchema],
       default: [],
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
 
     role: {
@@ -117,6 +140,19 @@ userSchema.pre("save", async function () {
 
   this.password = await bcrypt.hash(this.password, 10);
 });
+
+userSchema.methods.isPasswordChanged = function (jwtTime) {
+  if (!this.passwordChangedAt) {
+    return false;
+  }
+  const passwordChangeAt = parseInt(
+    this.passwordChangedAt.getTime() / 1000,
+    10,
+  );
+  console.log(passwordChangeAt);
+
+  return passwordChangeAt > jwtTime;
+};
 
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
