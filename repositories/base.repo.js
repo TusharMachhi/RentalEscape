@@ -8,5 +8,5 @@ export const baseRepo = (Model) => ({
 
   findById: (id, select = "") => Model.findById(id, select),
 
-  find: () => Model.find(),
+  find: (filter = {}) => Model.find(filter),
 });

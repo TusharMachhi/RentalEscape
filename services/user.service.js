@@ -108,4 +108,3 @@ export const userServices = {
     return await userRepo.updateById(userId, { active: false });
   },
 };
-

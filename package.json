@@ -29,6 +29,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
     "multer": "^2.3.0",
+    "slugify": "^1.6.9",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   }

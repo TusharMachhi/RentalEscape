@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const propertySchema = new mongoose.Schema(
   {
@@ -40,62 +41,52 @@ const propertySchema = new mongoose.Schema(
       maxlength: 5000,
     },
 
-    propertyType: {
-      type: String,
-      enum: [
-        "apartment",
-        "house",
-        "villa",
-        "cottage",
-        "farmhouse",
-        "guesthouse",
-        "hotel",
-        "resort",
-        "hostel",
-      ],
-      required: true,
-    },
-
     roomType: {
       type: String,
       enum: ["entire_place", "private_room", "shared_room"],
       required: true,
     },
 
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+
+    state: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    country: {
+      type: String,
+      default: "India",
+      trim: true,
+    },
+
+    postalCode: {
+      type: String,
+      trim: true,
+    },
+
     location: {
-      address: {
+      type: {
         type: String,
-        required: true,
-        trim: true,
-      },
-
-      city: {
-        type: String,
-        required: true,
-        trim: true,
-        index: true,
-      },
-
-      state: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      country: {
-        type: String,
-        default: "India",
-        trim: true,
-      },
-
-      postalCode: {
-        type: String,
-        trim: true,
+        enum: ["Point"],
+        default: "Point",
       },
 
       coordinates: {
         type: [Number],
-        required: true,
+        default: undefined,
       },
     },
 
@@ -290,8 +281,17 @@ const propertySchema = new mongoose.Schema(
   },
 );
 
+propertySchema.pre("validate", function () {
+  if (this.isModified("title")) {
+    this.slug = slugify(this.title, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+  }
+});
 propertySchema.index({
-  coordinates: "2dsphere",
+  location: "2dsphere",
 });
 
 const Property = mongoose.model("Property", propertySchema);
