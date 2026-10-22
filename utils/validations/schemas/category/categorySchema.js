@@ -21,29 +21,21 @@ const createCategorySchema = z.object({
 });
 
 const updateCategorySchema = z.object({
-  body: z
-    .object({
-      name: z
-        .string()
-        .trim()
-        .min(1, "category name is required")
-        .max(50, "category name must not exceed 50 characters")
-        .optional(),
+  body: z.object({
+    name: z
+      .string()
+      .trim()
+      .min(1, "category name is required")
+      .max(50, "category name must not exceed 50 characters")
+      .optional(),
 
-      description: z
-        .string()
-        .trim()
-        .min(1, "category description is required")
-        .max(500, "category description must not exceed 500 characters")
-        .optional(),
-    })
-    .refine(
-      (data) => data.name !== undefined || data.description !== undefined,
-      {
-        message: "at least one field is required",
-      },
-    ),
-
+    description: z
+      .string()
+      .trim()
+      .min(1, "category description is required")
+      .max(500, "category description must not exceed 500 characters")
+      .optional(),
+  }),
   params: z.object({
     id: z.string().min(1, "category id is required"),
   }),

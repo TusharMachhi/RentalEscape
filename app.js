@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(configureCors());
 app.use(express.json());
+app.set("query parser", "extended");
 app.use(cookieParser());
 app.use(apiVersioning("v1"));
 

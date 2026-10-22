@@ -8,7 +8,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon server.js",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js",
+    "test": "NODE_ENV=test nodemon server.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
     "multer": "^2.3.0",
+    "p-limit": "^7.3.3",
     "slugify": "^1.6.9",
     "winston": "^3.19.0",
     "zod": "^4.4.3"

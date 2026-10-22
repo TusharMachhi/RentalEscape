@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ErorrClassAPi.js";
 import { genAccessAndRefreshToken } from "../utils/genRefAndAcessToken.js";
 import { logger } from "../config/logger.js";
 import { uploadToCloudinary } from "../utils/middleware/cloudinary.js";
+import { ApiFeatures } from "../utils/middleware/ApiFeatures.js";
 
 export const userServices = {
   register: async (data) => {
@@ -73,8 +74,71 @@ export const userServices = {
     return tokens;
   },
   getAllUser: async (data) => {
-    const users = await userRepo.find(data);
-    return users;
+    const totalDocs = await userRepo.totalDocuments();
+    const features = new ApiFeatures(userRepo.find(), data, totalDocs)
+      .filter()
+      .sort()
+      .fields()
+      .paginate();
+
+    const users = await features.query;
+
+    return { pagination: features.pagination, users };
+    //   let queryObj = { ...data };
+    //   console.log(queryObj);
+
+    //   const excludedFields = ["page", "fields", "limit", "sort"];
+    //   excludedFields.forEach((fields) => delete queryObj[fields]);
+
+    //   let queryStr = JSON.stringify(queryObj);
+
+    //   queryStr = queryStr.replace(
+    //     /\b(gt|gte|ne|neq|lt|lte|regex|eq)\b/g,
+    //     (match) => `$${match}`,
+    //   );
+
+    //   let query = userRepo.find(JSON.parse(queryStr));
+    //   if (data.sort) {
+    //     const sortBy = data.sort.split(",").join(" ");
+    //     query = query.sort(sortBy);
+    //   } else {
+    //     query = query.sort("-createdAt");
+    //   }
+
+    //   if (data.fields) {
+    //     const fields = data.fields.split(",").join(" ");
+
+    //     query = query.select(fields);
+    //   }
+
+    //   const page = parseInt(data.page, 10) || 1;
+    //   const limit = parseInt(data.limit, 10) || 10;
+    //   const startIndex = (page - 1) * limit;
+    //   const endIndex = page * limit;
+    //   const total = await userRepo.totalDocuments();
+
+    //   const pagination = {};
+    //   if (startIndex > 0) {
+    //     pagination.prev = {
+    //       page: page - 1,
+    //       limit,
+    //     };
+    //   }
+    //   if (endIndex < total) {
+    //     pagination.next = {
+    //       page: page + 1,
+    //       limit,
+    //     };
+    //   }
+    //   const hasNextPage = endIndex < total;
+    //   const hasPrevPage = startIndex > 0;
+    //   ((pagination.hasNextPage = hasNextPage),
+    //     (pagination.hasPrevPage = hasPrevPage));
+    //   query = query.skip(startIndex).limit(limit);
+
+    //   const result = await query;
+
+    //   return { pagination, result };
   },
 
   getUser: async (data) => {

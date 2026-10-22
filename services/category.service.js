@@ -56,7 +56,7 @@ export const categoryService = {
     if (path) {
       const { public_id, secure_url } = await uploadToCloudinary({
         localPath: path,
-        folder: `EscapeRental/category/${data.name}/images`,
+        folder: `EscapeRental/category/images`,
         resourceType: "image",
       });
 

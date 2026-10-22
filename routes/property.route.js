@@ -4,7 +4,8 @@ import { roleAuth } from "../utils/middleware/roleAuthrization.js";
 import { uploadfile } from "../utils/middleware/multer.js";
 import { createProperty } from "../controllers/property.controller.js";
 import { validateZod } from "../utils/validations/zodValidation.js";
-import { createPropertySchema } from "../utils/validations/schemas/category/property/propertySchema.js";
+import { createPropertySchema } from "../utils/validations/schemas/property/propertySchema.js";
+import { parseJsonFields } from "../utils/middleware/nestedBodyjsonParser.js";
 
 const router = express.Router();
 

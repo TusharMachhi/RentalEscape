@@ -9,4 +9,6 @@ export const baseRepo = (Model) => ({
   findById: (id, select = "") => Model.findById(id, select),
 
   find: (filter = {}) => Model.find(filter),
+
+  totalDocuments: () => Model.countDocuments(),
 });

@@ -73,7 +73,9 @@ export const refresAceeshToken = async (req, res) => {
 };
 
 export const getAllUser = async (req, res) => {
-  const users = await userServices.getAllUser();
+  const query = req.query;
+
+  const users = await userServices.getAllUser(query);
 
   res
     .status(200)
@@ -108,5 +110,5 @@ export const getUserById = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const user = await userServices.deletUser(req?.user?.userId);
   logger.info(user);
-  res.status(200).json(new ResponseApi(200,"user deleted successfully"))
+  res.status(200).json(new ResponseApi(200, "user deleted successfully"));
 };
